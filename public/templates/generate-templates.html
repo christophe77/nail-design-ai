@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Nail Templates Generator</title>
+		<style>
+			body {
+				font-family: 'Poppins', Arial, sans-serif;
+				background: #fce4ec;
+				margin: 0;
+				padding: 20px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			h1 {
+				color: #bf5f82;
+				margin-bottom: 20px;
+			}
+			.container {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 20px;
+				max-width: 1200px;
+			}
+			.template {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin-bottom: 30px;
+			}
+			.canvas-container {
+				border: 1px solid #ddd;
+				margin-bottom: 10px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+			button {
+				background: linear-gradient(to right, #f48fb1, #9c27b0);
+				color: white;
+				border: none;
+				padding: 8px 16px;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: 500;
+				margin-top: 5px;
+			}
+			.controls {
+				margin: 20px 0;
+				background: white;
+				padding: 15px;
+				border-radius: 8px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+				width: 80%;
+				max-width: 600px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Nail Templates Generator</h1>
+
+		<div class="controls">
+			<p>This tool generates nail templates for each skin tone in your app.</p>
+			<button id="generateAllBtn">Generate All Templates</button>
+			<button id="downloadAllBtn">Download All Templates</button>
+		</div>
+
+		<div class="container" id="templatesContainer"></div>
+
+		<script>
+			// Skin tones from your app
+			const skinTones = [
+				{ name: 'very light', color: '#f6ede4', label: 'Très claire' },
+				{ name: 'light', color: '#f3e0d2', label: 'Claire' },
+				{ name: 'medium light', color: '#e5c8a8', label: 'Moyenne claire' },
+				{ name: 'medium', color: '#d8a278', label: 'Moyenne' },
+				{ name: 'medium dark', color: '#b07b59', label: 'Moyenne foncée' },
+				{ name: 'dark', color: '#8e562e', label: 'Foncée' },
+				{ name: 'very dark', color: '#613915', label: 'Très foncée' },
+			];
+
+			// Create template container for each skin tone
+			const container = document.getElementById('templatesContainer');
+
+			skinTones.forEach((tone) => {
+				const templateDiv = document.createElement('div');
+				templateDiv.className = 'template';
+
+				const canvasContainer = document.createElement('div');
+				canvasContainer.className = 'canvas-container';
+
+				const canvas = document.createElement('canvas');
+				canvas.width = 512;
+				canvas.height = 512;
+				canvas.id = `canvas-${tone.name.replace(' ', '-')}`;
+				canvasContainer.appendChild(canvas);
+
+				const nameLabel = document.createElement('div');
+				nameLabel.textContent = `${tone.label} (${tone.color})`;
+
+				const downloadBtn = document.createElement('button');
+				downloadBtn.textContent = 'Download';
+				downloadBtn.onclick = () => downloadTemplate(tone.name);
+
+				templateDiv.appendChild(canvasContainer);
+				templateDiv.appendChild(nameLabel);
+				templateDiv.appendChild(downloadBtn);
+
+				container.appendChild(templateDiv);
+			});
+
+			// Function to draw a template for a specific skin tone
+			function drawTemplate(toneName) {
+				const tone = skinTones.find((t) => t.name === toneName);
+				if (!tone) return;
+
+				const canvas = document.getElementById(
+					`canvas-${toneName.replace(' ', '-')}`,
+				);
+				const ctx = canvas.getContext('2d');
+
+				// Clear canvas with skin tone color as background
+				ctx.fillStyle = tone.color;
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+				// Calculate center and sizes
+				const centerX = canvas.width / 2;
+				const centerY = canvas.height / 2;
+
+				// Draw a nail shape in the center
+				drawNail(ctx, centerX, centerY);
+
+				// Add label
+				ctx.fillStyle = getContrastColor(tone.color);
+				ctx.font = 'bold 20px Arial';
+				ctx.textAlign = 'center';
+				ctx.fillText(`Skin Tone: ${tone.name}`, centerX, canvas.height - 30);
+			}
+
+			// Function to draw a nail
+			function drawNail(ctx, centerX, centerY) {
+				const nailWidth = 200;
+				const nailHeight = 250;
+
+				// Calculate nail position (centered)
+				const x = centerX - nailWidth / 2;
+				const y = centerY - nailHeight / 2;
+
+				// Draw nail bed shape
+				ctx.beginPath();
+				ctx.moveTo(x, y + nailHeight * 0.7); // Start at bottom left
+
+				// Left side curve
+				ctx.quadraticCurveTo(x, y + nailHeight * 0.1, x + nailWidth * 0.2, y);
+
+				// Top curve
+				ctx.bezierCurveTo(
+					x + nailWidth * 0.4,
+					y - nailHeight * 0.1,
+					x + nailWidth * 0.6,
+					y - nailHeight * 0.1,
+					x + nailWidth * 0.8,
+					y,
+				);
+
+				// Right side curve
+				ctx.quadraticCurveTo(
+					x + nailWidth,
+					y + nailHeight * 0.1,
+					x + nailWidth,
+					y + nailHeight * 0.7,
+				);
+
+				// Bottom line with slight curve
+				ctx.quadraticCurveTo(
+					x + nailWidth / 2,
+					y + nailHeight * 0.8,
+					x,
+					y + nailHeight * 0.7,
+				);
+
+				// Fill with light pink
+				ctx.fillStyle = '#fff1f3'; // Very light pink
+				ctx.fill();
+
+				// Add highlight
+				const gradient = ctx.createLinearGradient(
+					x,
+					y,
+					x + nailWidth,
+					y + nailHeight,
+				);
+				gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+				gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
+				gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+
+				ctx.fillStyle = gradient;
+				ctx.fill();
+
+				// Add outline
+				ctx.strokeStyle = '#dddddd';
+				ctx.lineWidth = 2;
+				ctx.stroke();
+
+				// Add "AI FILL AREA" text
+				ctx.fillStyle = '#cccccc';
+				ctx.font = '16px Arial';
+				ctx.textAlign = 'center';
+				ctx.fillText('AI FILL AREA', centerX, centerY);
+			}
+
+			// Generate all templates
+			document
+				.getElementById('generateAllBtn')
+				.addEventListener('click', () => {
+					skinTones.forEach((tone) => {
+						drawTemplate(tone.name);
+					});
+				});
+
+			// Download a specific template
+			function downloadTemplate(toneName) {
+				const canvas = document.getElementById(
+					`canvas-${toneName.replace(' ', '-')}`,
+				);
+				const link = document.createElement('a');
+				link.download = `nail-template-${toneName.replace(' ', '-')}.png`;
+				link.href = canvas.toDataURL('image/png');
+				link.click();
+			}
+
+			// Download all templates
+			document
+				.getElementById('downloadAllBtn')
+				.addEventListener('click', () => {
+					skinTones.forEach((tone) => {
+						downloadTemplate(tone.name);
+					});
+				});
+
+			// Helper function to determine text color based on background
+			function getContrastColor(hexColor) {
+				// Convert hex to RGB
+				const r = parseInt(hexColor.substr(1, 2), 16);
+				const g = parseInt(hexColor.substr(3, 2), 16);
+				const b = parseInt(hexColor.substr(5, 2), 16);
+
+				// Calculate luminance
+				const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+				// Return black for light colors, white for dark
+				return luminance > 0.5 ? '#000000' : '#ffffff';
+			}
+
+			// Generate templates on page load
+			window.onload = () => {
+				skinTones.forEach((tone) => {
+					drawTemplate(tone.name);
+				});
+			};
+		</script>
+	</body>
+</html>

@@ -1,0 +1,5 @@
+This file is a placeholder. 
+
+Please create a favicon.ico file from the icon-192.png image using an online converter like https://www.favicon-generator.org/ or similar.
+
+Once created, rename it to favicon.ico and place it in this directory. 
