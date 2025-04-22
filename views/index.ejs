@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
-		<meta
-			name="description"
-			content="Créez des designs d'ongles uniques avec l'IA"
-		/>
+		<meta name="description" content="Create unique nail designs with AI" />
 		<meta name="theme-color" content="#bf5f82" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta
@@ -27,11 +24,11 @@
 			<h1>Nail Design Generator</h1>
 			<form id="nailForm">
 				<div class="form-group">
-					<label for="skinTone">Couleur de peau:</label>
+					<label for="skinTone">Skin Tone:</label>
 					<div class="skin-tone-selector">
 						<div class="selected-tone">
 							<span class="tone-preview"></span>
-							<span class="tone-name">Choisir une tonalité</span>
+							<span class="tone-name">Select a tone</span>
 							<span class="dropdown-icon"></span>
 						</div>
 						<div class="tone-options">
@@ -44,14 +41,14 @@
 									class="tone-swatch"
 									style="background-color: #f6ede4"
 								></span>
-								<span class="tone-label">Très claire</span>
+								<span class="tone-label">Very Light</span>
 							</div>
 							<div class="tone-option" data-value="light" data-color="#f3e0d2">
 								<span
 									class="tone-swatch"
 									style="background-color: #f3e0d2"
 								></span>
-								<span class="tone-label">Claire</span>
+								<span class="tone-label">Light</span>
 							</div>
 							<div
 								class="tone-option"
@@ -62,14 +59,14 @@
 									class="tone-swatch"
 									style="background-color: #e5c8a8"
 								></span>
-								<span class="tone-label">Moyenne claire</span>
+								<span class="tone-label">Medium Light</span>
 							</div>
 							<div class="tone-option" data-value="medium" data-color="#d8a278">
 								<span
 									class="tone-swatch"
 									style="background-color: #d8a278"
 								></span>
-								<span class="tone-label">Moyenne</span>
+								<span class="tone-label">Medium</span>
 							</div>
 							<div
 								class="tone-option"
@@ -80,14 +77,14 @@
 									class="tone-swatch"
 									style="background-color: #b07b59"
 								></span>
-								<span class="tone-label">Moyenne foncée</span>
+								<span class="tone-label">Medium Dark</span>
 							</div>
 							<div class="tone-option" data-value="dark" data-color="#8e562e">
 								<span
 									class="tone-swatch"
 									style="background-color: #8e562e"
 								></span>
-								<span class="tone-label">Foncée</span>
+								<span class="tone-label">Dark</span>
 							</div>
 							<div
 								class="tone-option"
@@ -98,16 +95,16 @@
 									class="tone-swatch"
 									style="background-color: #613915"
 								></span>
-								<span class="tone-label">Très foncée</span>
+								<span class="tone-label">Very Dark</span>
 							</div>
 						</div>
 						<input type="hidden" id="skinTone" required />
 					</div>
 				</div>
-				<input type="text" id="kw1" placeholder="Mot-clé 1" required />
-				<input type="text" id="kw2" placeholder="Mot-clé 2" required />
-				<input type="text" id="kw3" placeholder="Mot-clé 3" required />
-				<button type="submit">Générer</button>
+				<input type="text" id="kw1" placeholder="Keyword 1" required />
+				<input type="text" id="kw2" placeholder="Keyword 2" required />
+				<input type="text" id="kw3" placeholder="Keyword 3" required />
+				<button type="submit">Generate</button>
 			</form>
 			<div id="result"></div>
 		</div>
@@ -162,9 +159,7 @@
 						if (value) {
 							skinToneInput.setCustomValidity('');
 						} else {
-							skinToneInput.setCustomValidity(
-								'Veuillez sélectionner une tonalité de peau',
-							);
+							skinToneInput.setCustomValidity('Please select a skin tone');
 						}
 					});
 				});
@@ -182,9 +177,7 @@
 					.addEventListener('submit', function (e) {
 						if (!skinToneInput.value) {
 							e.preventDefault();
-							skinToneInput.setCustomValidity(
-								'Veuillez sélectionner une tonalité de peau',
-							);
+							skinToneInput.setCustomValidity('Please select a skin tone');
 							skinToneInput.reportValidity();
 						} else {
 							skinToneInput.setCustomValidity('');
